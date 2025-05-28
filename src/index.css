@@ -143,6 +143,30 @@
       @apply text-gray-100 font-medium text-base;
     }
   }
+
+  .metadata-card {
+    @apply 
+      bg-gradient-to-br from-white/5 to-white/2
+      backdrop-blur-sm
+      border border-white/10
+      p-6 rounded-xl
+      shadow-lg hover:shadow-xl
+      hover:-translate-y-1
+      transition-all duration-300 ease-in-out
+      relative overflow-hidden;
+  }
+
+  .metadata-card-icon {
+    @apply w-6 h-6 text-amber-400;
+  }
+
+  .metadata-card-label {
+    @apply text-gray-300 text-xs font-semibold uppercase tracking-wider;
+  }
+
+  .metadata-card-value {
+    @apply text-white text-3xl font-extrabold;
+  }
 }
 
 @utility text-gradient {
@@ -161,5 +185,54 @@
 
   &::-webkit-scrollbar {
     display: none;
+  }
+}
+
+@keyframes slide {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
+}
+
+.animate-slide {
+  animation: slide 20s linear infinite;
+}
+
+@layer utilities {
+  .genre-tag {
+    @apply 
+      px-4 py-1
+      bg-indigo-500 backdrop-blur-sm
+      border border-white/10
+      rounded-lg
+      text-white font-medium text-sm
+      shadow-sm
+      cursor-default;
+  }
+
+  .stats-card {
+    @apply 
+      text-center rounded-lg p-4
+      backdrop-blur-sm
+      shadow-lg hover:shadow-xl
+      transition-all duration-300 ease-in-out;
+  }
+
+  .stats-header {
+    @apply 
+      text-sm font-bold text-white uppercase tracking-wider mb-3;
+  }
+
+  .stats-value {
+    @apply 
+      text-3xl font-bold text-white;
+  }
+
+  .stats-status {
+    @apply 
+      text-2xl font-bold;
   }
 } 
