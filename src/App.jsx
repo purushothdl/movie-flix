@@ -1,13 +1,18 @@
 import { useEffect, useState } from 'react'
-import { Link } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useDebounce } from 'react-use';
 import './App.css'
 import config from './config';
 import Search from './components/Search'
 import Spinner from './components/Spinner';
 import MovieCard from './components/MovieCard';
+import PaginationButton from './components/PaginationButton';
 
 const App = () => {
+  const location = useLocation();
+  const navigate = useNavigate();
+  const queryParams = new URLSearchParams(location.search);
+  const initialPage = parseInt(queryParams.get('page') || '1', 10);
 
   const [searchTerm, setSearchTerm] = useState('');
   const [debouncedSearchTerm, setDebouncedSearchTerm] = useState('')
@@ -20,7 +25,7 @@ const App = () => {
   const [trendingMovieErrorMessage, setTrendingMovieErrorMessage] = useState('')
   const [isTrendingLoading, setIsTrendingLoading] = useState(false)
 
-  const [currentPage, setCurrentPage] = useState(1);
+  const [currentPage, setCurrentPage] = useState(initialPage);
   const [totalPages, setTotalPages] = useState(1); // 
 
   useDebounce(() => setDebouncedSearchTerm(searchTerm), 500, [searchTerm])
@@ -115,24 +120,28 @@ const App = () => {
   const handlePageChange = (newPage) => {
     if (newPage >= 1 && newPage <= totalPages) {
       setCurrentPage(newPage);
+      navigate(`?page=${newPage}`);
     }
   };
 
   const renderPagination = () => {
     const pages = [];
+    const maxPagesToShow = 5; 
 
-    // Always add the first page
     pages.push(
-      <button
+      <PaginationButton
         key={1}
         onClick={() => handlePageChange(1)}
-        className={`px-4 py-2 ${
-          currentPage === 1 ? 'bg-blue-500 text-white' : 'bg-gray-700 text-white'
-        } rounded`}
+        isActive={currentPage === 1}
       >
         1
-      </button>
+      </PaginationButton>
     );
+
+    // Add ellipsis if the current page is far from the first page
+    if (currentPage > maxPagesToShow - 2) {
+      pages.push(<span key="ellipsis-start" className="px-4 py-2 text-white">. . .</span>);
+    }
 
     // Add pages around the current page
     for (
@@ -141,30 +150,30 @@ const App = () => {
       i++
     ) {
       pages.push(
-        <button
+        <PaginationButton
           key={i}
           onClick={() => handlePageChange(i)}
-          className={`px-4 py-2 ${
-            currentPage === i ? 'bg-blue-500 text-white' : 'bg-gray-700 text-white'
-          } rounded`}
+          isActive={currentPage === i}
         >
           {i}
-        </button>
+        </PaginationButton>
       );
     }
 
-    // Always add the last page
+    // Add ellipsis if the current page is far from the last page
+    if (currentPage <= totalPages - maxPagesToShow + 2) {
+      pages.push(<span key="ellipsis-end" className="px-4 py-2 text-white">. . .</span>);
+    }
+
     if (totalPages > 1) {
       pages.push(
-        <button
+        <PaginationButton
           key={totalPages}
           onClick={() => handlePageChange(totalPages)}
-          className={`px-4 py-2 ${
-            currentPage === totalPages ? 'bg-blue-500 text-white' : 'bg-gray-700 text-white'
-          } rounded`}
+          isActive={currentPage === totalPages}
         >
           {totalPages}
-        </button>
+        </PaginationButton>
       );
     }
 
@@ -220,21 +229,21 @@ const App = () => {
 
               {/* Pagination Controls */}
               <div className="flex justify-center gap-2 mt-8 flex-wrap">
-                <button
+                <PaginationButton
                   onClick={() => handlePageChange(currentPage - 1)}
                   disabled={currentPage === 1}
-                  className="px-4 py-2 bg-gray-700 text-white rounded disabled:opacity-50"
+                  hoverColor="bg-indigo-500"
                 >
                   Previous
-                </button>
+                </PaginationButton>
                 {renderPagination()}
-                <button
+                <PaginationButton
                   onClick={() => handlePageChange(currentPage + 1)}
                   disabled={currentPage === totalPages}
-                  className="px-4 py-2 bg-gray-700 text-white rounded disabled:opacity-50"
+                  hoverColor="bg-indigo-500"
                 >
                   Next
-                </button>
+                </PaginationButton>
               </div>
             </>
           )
