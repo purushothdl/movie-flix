@@ -1,36 +1,12 @@
-import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import Spinner from './Spinner';
-import config from '../config';
+import { useMovieDetails } from '../../hooks/useMovieDetails';
+import Spinner from '../common/Spinner';
 import { ClockIcon, StarIcon, CalendarIcon, CurrencyDollarIcon } from '@heroicons/react/24/outline';
+import '../../index.css';
 
 const MovieDetails = () => {
   const { id } = useParams();
-  const [movie, setMovie] = useState(null);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState('');
-
-  const fetchMovieDetails = async () => {
-    setIsLoading(true);
-    try {
-      const response = await fetch(
-        `${config.API_BASE_URL}/movie/${id}?api_key=${config.API_KEY}`,
-        config.API_OPTIONS
-      );
-      if (!response.ok) throw new Error('Failed to fetch movie details');
-      const data = await response.json();
-      setMovie(data);
-    } catch (err) {
-      console.error('Error fetching movie details:', err);
-      setError('Error fetching movie details');
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    fetchMovieDetails();
-  }, [id]);
+  const { movie, isLoading, error } = useMovieDetails(id);
 
   if (isLoading) return <Spinner />;
   if (error) return <p className="text-red-500 text-center">{error}</p>;
@@ -67,7 +43,7 @@ const MovieDetails = () => {
               {movie.title}
             </h1>
             {movie.tagline && (
-              <p className="text-xl italic text-amber-400 mb-6 font-light">
+              <p className="text-xl italic text-amber-400 mb-6 font-light text-center">
                 "{movie.tagline}"
               </p>
             )}
