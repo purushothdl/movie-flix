@@ -5,9 +5,12 @@ import { fetchMovies } from '../api/movieApi';
 import { updateTrendingMovies } from '../api/trendingApi';
 import { TrendingMoviesContext } from '../context/TrendingMoviesContext';
 
-export const useMovies = (initialPage = 1) => {
-  const [searchTerm, setSearchTerm] = useState('');
-  const [debouncedSearchTerm, setDebouncedSearchTerm] = useState('');
+// Tracks last search to prevent duplicate updates
+let lastSearchTermRef = '';
+
+export const useMovies = (initialPage = 1, initialSearch = '') => {
+  const [searchTerm, setSearchTerm] = useState(initialSearch);
+  const [debouncedSearchTerm, setDebouncedSearchTerm] = useState(initialSearch);
 
   const [movieList, setMovieList] = useState([]);
   const [errorMessage, setErrorMessage] = useState('');
@@ -27,8 +30,11 @@ export const useMovies = (initialPage = 1) => {
         const { results, totalPages } = await fetchMovies(debouncedSearchTerm, currentPage);
         setMovieList(results);
         setTotalPages(totalPages);
-        if (debouncedSearchTerm && results.length > 0) {
+
+        if (debouncedSearchTerm === '') lastSearchTermRef = '';
+        if (debouncedSearchTerm && results.length > 0 && debouncedSearchTerm !== lastSearchTermRef) {
           await updateTrendingMovies(results[0], debouncedSearchTerm);
+          lastSearchTermRef = debouncedSearchTerm;
         }
       } catch (error) {
         setErrorMessage('Error fetching movies. Please try again later.');

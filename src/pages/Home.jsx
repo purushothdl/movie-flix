@@ -11,6 +11,7 @@ const Home = () => {
   const navigate = useNavigate();
   const queryParams = new URLSearchParams(location.search);
   const initialPage = parseInt(queryParams.get('page') || '1', 10);
+  const initialSearch = queryParams.get('search') || '';
 
   const {
     searchTerm,
@@ -24,13 +25,24 @@ const Home = () => {
     currentPage,
     setCurrentPage,
     totalPages,
-  } = useMovies(initialPage);
+  } = useMovies(initialPage, initialSearch);
 
   const handlePageChange = (newPage) => {
     if (newPage >= 1 && newPage <= totalPages) {
       setCurrentPage(newPage);
       navigate(`?page=${newPage}`);
     }
+  };
+
+  const handleSearchChange = (value) => {
+    setSearchTerm(value);
+    if (value) {
+      queryParams.set('search', value);
+    } else {
+      queryParams.delete('search');
+    }
+    queryParams.set('page', '1'); 
+    navigate({ search: queryParams.toString() });
   };
 
   return (
@@ -42,7 +54,7 @@ const Home = () => {
           <h1>
             Find <span className="text-gradient">Movies</span> You'll Enjoy Without the Hassle
           </h1>
-          <Search searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
+          <Search searchTerm={searchTerm} setSearchTerm={handleSearchChange} />
         </header>
 
         {isTrendingLoading ? (
