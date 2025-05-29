@@ -48,7 +48,7 @@ const Home = () => {
         {isTrendingLoading ? (
           <Spinner />
         ) : trendingMovieErrorMessage ? (
-          <p className="text-red-500 mt-10 mb-10">{trendingMovieErrorMessage}</p>
+          <p className="text-red-500 mt-10 mb-10 text-center">{trendingMovieErrorMessage}</p>
         ) : trendingMoviesList.length > 0 ? (
           <section className="trending">
             <h2>Trending Movies</h2>
@@ -72,7 +72,7 @@ const Home = () => {
           {isLoading ? (
             <Spinner />
           ) : errorMessage ? (
-            <p className="text-red-500">{errorMessage}</p>
+            <p className="text-red-500 mt-10 mb-10 text-center">{errorMessage}</p>
           ) : (
             <>
               <ul>

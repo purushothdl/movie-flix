@@ -20,7 +20,7 @@ export const fetchMovies = async (query = '', page = 1) => {
 export const fetchMovieDetails = async (id) => {
   try {
     const response = await fetch(
-      `${config.API_BASE_URL}/movie/${id}?api_key=${config.API_KEY}`,
+      `${config.API_BASE_URL}/movie/${id}`,
       config.API_OPTIONS
     );
     if (!response.ok) throw new Error('Failed to fetch movie details');

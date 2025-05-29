@@ -2,7 +2,7 @@ import { useParams } from 'react-router-dom';
 import { useMovieDetails } from '../../hooks/useMovieDetails';
 import Spinner from '../common/Spinner';
 import { ClockIcon, StarIcon, CalendarIcon, CurrencyDollarIcon } from '@heroicons/react/24/outline';
-import '../../index.css';
+import '../../index.css'
 
 const MovieDetails = () => {
   const { id } = useParams();
@@ -53,23 +53,22 @@ const MovieDetails = () => {
 
             {/* Metadata Cards */}
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
-              
               {/* Runtime Card */}
               <div className="metadata-card">
                 <div className="flex items-center gap-2 mb-3">
-                  <ClockIcon className="metadata-card-icon" />
-                  <p className="metadata-card-label">Runtime</p>
+                  <ClockIcon className="icon" />
+                  <p className="label">Runtime</p>
                 </div>
-                <p className="metadata-card-value">{movie.runtime ? `${movie.runtime} min` : 'N/A'}</p>
+                <p className="value">{movie.runtime ? `${movie.runtime} min` : 'N/A'}</p>
               </div>
 
               {/* Rating Card */}
               <div className="metadata-card">
                 <div className="flex items-center gap-2 mb-3">
-                  <StarIcon className="metadata-card-icon" />
-                  <p className="metadata-card-label">Rating</p>
+                  <StarIcon className="icon" />
+                  <p className="label">Rating</p>
                 </div>
-                <p className="metadata-card-value">
+                <p className="value">
                   {movie.vote_average != null ? `${movie.vote_average.toFixed(1)}/10` : 'N/A'}
                 </p>
               </div>
@@ -77,10 +76,10 @@ const MovieDetails = () => {
               {/* Release Card */}
               <div className="metadata-card">
                 <div className="flex items-center gap-2 mb-3">
-                  <CalendarIcon className="metadata-card-icon" />
-                  <p className="metadata-card-label">Release</p>
+                  <CalendarIcon className="icon" />
+                  <p className="label">Release</p>
                 </div>
-                <p className="metadata-card-value">
+                <p className="value">
                   {movie.release_date ? new Date(movie.release_date).getFullYear() : 'N/A'}
                 </p>
               </div>
@@ -88,10 +87,10 @@ const MovieDetails = () => {
               {/* Budget Card */}
               <div className="metadata-card">
                 <div className="flex items-center gap-2 mb-3">
-                  <CurrencyDollarIcon className="metadata-card-icon" />
-                  <p className="metadata-card-label">Budget</p>
+                  <CurrencyDollarIcon className="icon" />
+                  <p className="label">Budget</p>
                 </div>
-                <p className="metadata-card-value">
+                <p className="value">
                   {movie.budget && movie.budget > 0 ? `$${(movie.budget / 1000000).toFixed(0)}M` : 'N/A'}
                 </p>
               </div>
@@ -157,22 +156,18 @@ const MovieDetails = () => {
         <div className="mt-12 mb-8">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <div className="stats-card">
-              <h3 className="stats-header">Popularity</h3>
-              <p className="stats-value">{movie.popularity?.toFixed(0)}</p>
+              <h3>Popularity</h3>
+              <p>{movie.popularity?.toFixed(0)}</p>
             </div>
 
             <div className="stats-card">
-              <h3 className="stats-header">Vote Count</h3>
-              <p className="stats-value">{movie.vote_count?.toLocaleString()}</p>
+              <h3>Vote Count</h3>
+              <p>{movie.vote_count?.toLocaleString()}</p>
             </div>
 
             <div className="stats-card">
-              <h3 className="stats-header">Status</h3>
-              <span className={`stats-status ${
-                movie.status === 'Released'
-                  ? 'text-green-400'
-                  : 'text-yellow-400'
-              }`}>
+              <h3>Status</h3>
+              <span className={movie.status === 'Released' ? 'text-green-400' : 'text-yellow-400'}>
                 {movie.status}
               </span>
             </div>

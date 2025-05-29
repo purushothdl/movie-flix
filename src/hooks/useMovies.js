@@ -1,9 +1,9 @@
 // src/hooks/useMovies.js
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import { useDebounce } from 'react-use';
-// import { fetchMovies, fetchTrendingMovies, updateTrendingMovies } from '../api';
 import { fetchMovies } from '../api/movieApi';
-import { fetchTrendingMovies, updateTrendingMovies } from '../api/trendingApi';
+import { updateTrendingMovies } from '../api/trendingApi';
+import { TrendingMoviesContext } from '../context/TrendingMoviesContext';
 
 export const useMovies = (initialPage = 1) => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -13,9 +13,7 @@ export const useMovies = (initialPage = 1) => {
   const [errorMessage, setErrorMessage] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
-  const [trendingMoviesList, setTrendingMoviesList] = useState([]);
-  const [trendingMovieErrorMessage, setTrendingMovieErrorMessage] = useState('');
-  const [isTrendingLoading, setIsTrendingLoading] = useState(false);
+  const { trendingMoviesList, trendingMovieErrorMessage, isTrendingLoading } = useContext(TrendingMoviesContext);
 
   const [currentPage, setCurrentPage] = useState(initialPage);
   const [totalPages, setTotalPages] = useState(1);
@@ -41,21 +39,6 @@ export const useMovies = (initialPage = 1) => {
     };
     loadMovies();
   }, [debouncedSearchTerm, currentPage]);
-
-  useEffect(() => {
-    const loadTrendingMovies = async () => {
-      setIsTrendingLoading(true);
-      try {
-        const movies = await fetchTrendingMovies();
-        setTrendingMoviesList(movies);
-      } catch (error) {
-        setTrendingMovieErrorMessage('Error fetching trending movies');
-      } finally {
-        setIsTrendingLoading(false);
-      }
-    };
-    loadTrendingMovies();
-  }, []);
 
   return {
     searchTerm,
