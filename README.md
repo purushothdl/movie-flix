@@ -1,5 +1,12 @@
 # Movie Finder App
 
+![Movieflix 1](demo/images/movieflix1.png)
+![Movieflix 2](demo/images/movieflix2.png)
+![Movieflix 3](demo/images/movieflix3.png)
+![Movieflix 4](demo/images/movieflix4.png)
+![Movieflix 5](demo/images/movieflix5.png)
+![Movieflix 6](demo/images/movieflix6.png)
+
 This is a React-based movie finder application that allows users to search for movies, view trending movies, and update trending movie metrics. The app integrates with The Movie Database (TMDB) API for movie data and uses MongoDB to store trending movie metrics.
 
 ## Features
